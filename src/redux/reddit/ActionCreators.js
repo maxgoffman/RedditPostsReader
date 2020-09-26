@@ -43,5 +43,19 @@ const fetchSuccess = (list) => ({
 
 const fetchFailed = (errmess) => ({
   type: ActionTypes.REDDIT_ERROR_FETCH,
-  payload: errmess
+  error: errmess
+});
+
+export const selectItem = (item) => ({
+  type: ActionTypes.REDDIT_SELECT_ITEM,
+  item: item
+});
+
+export const removeItem = (item) => ({
+  type: ActionTypes.REDDIT_REMOVE_ITEM,
+  item: item
+});
+
+export const removeAllItems = () => ({
+  type: ActionTypes.REDDIT_REMOVE_ALL_ITEMS
 });

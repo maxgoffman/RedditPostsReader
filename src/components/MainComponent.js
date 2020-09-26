@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Row } from 'reactstrap';
-import { getTopPosts } from '../redux/reddit/ActionCreators';
+import { getTopPosts, selectItem } from '../redux/reddit/ActionCreators';
 import { Loading } from './controls/loadplaceholder/LoadingComponent';
 import RedditPostsListComponent from './RedditPostsListComponent';
+import RedditPostDetailsComponent from './RedditPostDetailsComponent';
 
 /** 
   * @desc Main react component:
@@ -21,6 +22,7 @@ import RedditPostsListComponent from './RedditPostsListComponent';
 const Main = React.memo( (props) => {
   const reduxProps = useSelector(state => ({
     list:state.Reddit.list,
+    itemSelected:state.Reddit.selectedItem,
     loading:state.Reddit.isLoading,
     redditErrMess:state.Reddit.errMess,
   }), shallowEqual);
@@ -34,6 +36,10 @@ const Main = React.memo( (props) => {
     
   }, [didMount, dispatch]);
   
+  const toggleRedditPostDetails = (item) => {
+    dispatch(selectItem(item));
+  };
+
   const mainScreen = () => {
     if (reduxProps.loading) {
       return(
@@ -45,7 +51,8 @@ const Main = React.memo( (props) => {
     else {
       return (
         <Row>
-          <RedditPostsListComponent postList={reduxProps.list} />
+          <RedditPostsListComponent postList={reduxProps.list} toggleRedditPostDetails={toggleRedditPostDetails} />
+          <RedditPostDetailsComponent itemSelected={reduxProps.itemSelected} />
         </Row>
       );
     }
