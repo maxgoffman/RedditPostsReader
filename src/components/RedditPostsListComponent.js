@@ -34,6 +34,7 @@ function RedditPostsListComponent(props) {
 }
 
 function ListItems(props) {
+    //configure moment for correct relative date conversion
     moment.relativeTimeRounding(Math.floor);
     moment.relativeTimeThreshold('s', 60);
     moment.relativeTimeThreshold('m', 60);
@@ -41,6 +42,13 @@ function ListItems(props) {
     moment.relativeTimeThreshold('d', 7);
     moment.relativeTimeThreshold('w', 4);
     moment.relativeTimeThreshold('M', 12);
+    
+    const removePost = (e, item) => {
+        //stop event propagation to avoid card click
+        e.stopPropagation();
+        props.removePost(item);
+    }
+    
     const items = props.posts.map((item, index, list) => {
         const diffTime = moment.unix(item.data.created_utc).fromNow();
         const unreadIcon = item.read ?
@@ -70,7 +78,7 @@ function ListItems(props) {
                 </Row>
                 <Row className="mb-3">
                     <Col>
-                        <span>Dismiss Post</span>
+                        <span onClick={(event) => removePost(event, item)}>Dismiss Post</span>
                     </Col>
                     <Col className="d-flex">
                         <span>{item.data.num_comments} comments</span>
