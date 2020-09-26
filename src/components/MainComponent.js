@@ -3,6 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Row } from 'reactstrap';
 import { getTopPosts } from '../redux/reddit/ActionCreators';
 import { Loading } from './controls/loadplaceholder/LoadingComponent';
+import RedditPostsListComponent from './RedditPostsListComponent';
 
 /** 
   * @desc Main react component:
@@ -44,10 +45,7 @@ const Main = React.memo( (props) => {
     else {
       return (
         <Row>
-          {
-            //Print Reddit list data to check it's working
-            JSON.stringify(reduxProps.list)
-          }
+          <RedditPostsListComponent postList={reduxProps.list} />
         </Row>
       );
     }
