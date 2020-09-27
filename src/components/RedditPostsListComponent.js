@@ -26,7 +26,7 @@ function RedditPostsListComponent(props) {
             />
             <Row>
                 <Col>
-                    <h4>Dismiss All</h4>
+                    <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
                 </Col>
             </Row>
         </Col>
@@ -49,44 +49,46 @@ function ListItems(props) {
         props.removePost(item);
     }
     
-    const items = props.posts.map((item, index, list) => {
-        const diffTime = moment.unix(item.data.created_utc).fromNow();
-        const unreadIcon = item.read ?
-            <React.Fragment></React.Fragment> :
-            <FontAwesomeIcon icon={faCircle} />
-        return (
-            <Card key={index} 
-                tag="a" 
-                onClick={() => props.toggleRedditPostDetails(item)} 
-                style={{ cursor: "pointer" }} 
-                className={`my-2 text-center`}>
-                <Row className="mb-3">
-                    <Col>
-                        {unreadIcon}<span>{item.data.author}</span>
-                    </Col>
-                    <Col className="d-flex">
-                        <span>{diffTime}</span>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col>
-                        <CardImg top src={item.data.thumbnail}  />
-                    </Col>
-                    <Col className="d-flex">
-                        <span>{item.data.title}</span>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col>
-                        <span onClick={(event) => removePost(event, item)}>Dismiss Post</span>
-                    </Col>
-                    <Col className="d-flex">
-                        <span>{item.data.num_comments} comments</span>
-                    </Col>
-                </Row>
-            </Card>
-        );
-    });
+    const items = !props.posts ? 
+        [] : 
+        props.posts.map((item, index, list) => {
+            const diffTime = moment.unix(item.data.created_utc).fromNow();
+            const unreadIcon = item.read ?
+                <React.Fragment></React.Fragment> :
+                <FontAwesomeIcon icon={faCircle} />
+            return (
+                <Card key={index} 
+                    tag="a" 
+                    onClick={() => props.toggleRedditPostDetails(item)} 
+                    style={{ cursor: "pointer" }} 
+                    className={`my-2 text-center`}>
+                    <Row className="mb-3">
+                        <Col>
+                            {unreadIcon}<span>{item.data.author}</span>
+                        </Col>
+                        <Col className="d-flex">
+                            <span>{diffTime}</span>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3">
+                        <Col>
+                            <CardImg top src={item.data.thumbnail}  />
+                        </Col>
+                        <Col className="d-flex">
+                            <span>{item.data.title}</span>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3">
+                        <Col>
+                            <span onClick={(event) => removePost(event, item)}>Dismiss Post</span>
+                        </Col>
+                        <Col className="d-flex">
+                            <span>{item.data.num_comments} comments</span>
+                        </Col>
+                    </Row>
+                </Card>
+            );
+        });
     return (<React.Fragment>{items}</React.Fragment>);
 }
 

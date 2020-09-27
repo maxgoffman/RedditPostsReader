@@ -47,6 +47,12 @@ export const Reddit = (state = initialState, action) => {
             ...state, 
             list: state.list.filter((item) => item !== action.item) 
           };
+
+      case ActionTypes.REDDIT_REMOVE_ALL_ITEMS:
+        return {
+          ...state, 
+          list: null 
+        };
       
 
       default:

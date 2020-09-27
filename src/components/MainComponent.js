@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Row } from 'reactstrap';
-import { getTopPosts, selectItem, removeItem } from '../redux/reddit/ActionCreators';
+import { getTopPosts, selectItem, removeItem, removeAllItems } from '../redux/reddit/ActionCreators';
 import { Loading } from './controls/loadplaceholder/LoadingComponent';
 import RedditPostsListComponent from './RedditPostsListComponent';
 import RedditPostDetailsComponent from './RedditPostDetailsComponent';
@@ -43,6 +43,9 @@ const Main = React.memo( (props) => {
   const removePost = (item) => {
     dispatch(removeItem(item));
   };
+  const removeAllPosts = () => {
+    dispatch(removeAllItems());
+  };
 
   const mainScreen = () => {
     if (reduxProps.loading) {
@@ -59,6 +62,7 @@ const Main = React.memo( (props) => {
             postList={reduxProps.list} 
             toggleRedditPostDetails={toggleRedditPostDetails}
             removePost={removePost} 
+            removeAllPosts={removeAllPosts} 
           />
           <RedditPostDetailsComponent itemSelected={reduxProps.itemSelected} />
         </Row>
