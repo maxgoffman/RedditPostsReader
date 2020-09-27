@@ -1,0 +1,26 @@
+@mixin font-faces($fonts) {
+    @each $family, $src, $format in $fonts {
+        @include font-face($family, $src, $format);
+      } 
+}
+
+@mixin font-face($family, $src, $format) {
+    
+    @font-face {
+        font-family: $family;
+        src: url($src) format($format);
+    }    
+}
+
+@mixin font-props($family, $size, $weight:normal) {
+    font : {
+        family:$family;
+        size:$size;
+        weight:$weight;
+    }
+}
+
+@mixin colored-font-props($color, $family, $size, $weight:normal) {
+    color:$color;
+    @include font-props($family, $size, $weight);
+}

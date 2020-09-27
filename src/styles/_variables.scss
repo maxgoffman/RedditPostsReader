@@ -1,0 +1,17 @@
+
+//fonts
+$font-path:"../fonts/";
+$ibmplexsans-font: 'IBMPlexSans';
+$ibmplexsansbold-font: $ibmplexsans-font + "Bold";
+$size-smallest: 8px;
+$size-very-small: $size-smallest * 1.25;
+$size-small: $size-smallest * 1.5;
+$size-normal: $size-smallest * 2;
+$size-large: $size-smallest * 2.25;
+$size-extra-large: $size-smallest * 3;
+$size-semibold-font: 15px;
+$size-brand-font: 25px;
+
+//lists
+$font-faces:(#{$ibmplexsans-font}, $font-path + $ibmplexsans-font + "-Regular.ttf", "truetype"),
+(#{$ibmplexsansbold-font}, $font-path + $ibmplexsans-font + "-Bold.ttf", "truetype");
