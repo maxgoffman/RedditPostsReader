@@ -16,7 +16,7 @@ import styles from './RedditPostsListComponent.module.scss';
 function RedditPostsListComponent(props) {
     //render post list
     return (
-        <Col xs={3}>
+        <Col xs={3} className={`${styles.columnBack} pr-0`}>
             <div className={styles.postlist}>
                 <div className={`${styles.listheader}`}>
                     <h4 className="mb-0">Reddit Posts</h4>
@@ -26,9 +26,9 @@ function RedditPostsListComponent(props) {
                     toggleRedditPostDetails={props.toggleRedditPostDetails} 
                     removePost={props.removePost} 
                 />
-                <div className={`${styles.listfooter}`}>
+                <Row className={`${styles.listfooter} mx-auto`}>
                     <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
-                </div>
+                </Row>
             </div>
         </Col>
     );
@@ -54,9 +54,43 @@ function ListItems(props) {
         [] : 
         props.posts.map((item, index, list) => {
             const diffTime = moment.unix(item.data.created_utc).fromNow();
-            const unreadIcon = item.read ?
+            const unreadIcon = (item.read ?
                 <React.Fragment></React.Fragment> :
                 <FontAwesomeIcon icon={faCircle} size="xs" />
+            );
+            const postImage = ( item.data.thumbnail.match(/\.(jpeg|jpg|gif|png)$/) != null ?
+                (
+                    item.data.preview ?
+                    //use smallest thumbnail preview resolution
+                    <Col 
+                        className={`pl-0 pr-1 text-left`}
+                        style={
+                            {
+                                maxWidth:`${item.data.preview.images[0].resolutions[0].width}px`,
+                                maxHeight:`${item.data.preview.images[0].resolutions[0].height}px`
+                            }
+                        }
+                    >
+                        <CardImg src={item.data.thumbnail} />
+                    </Col> :
+                    //there is no preview show real thumbnail dimensions
+                    <Col 
+                        className={`pl-0 pr-1 text-left`}
+                        style={
+                            {
+                                maxWidth:`${item.data.thumbnail_width}px`,
+                                maxHeight:`${item.data.thumbnail_height}px`
+                            }
+                        }
+                    >
+                        <CardImg 
+                            src={item.data.thumbnail}
+                        />
+                    </Col>
+                ) :
+                //there is no thumbnail, don't show anything
+                <React.Fragment></React.Fragment>
+            );
             return (
                 <Card key={index} 
                     tag="a" 
@@ -72,9 +106,7 @@ function ListItems(props) {
                         </Col>
                     </Row>
                     <Row className="mb-1 ml-1">
-                        <Col className={`pl-0 pr-1 text-left ${styles.thumbnail}`}>
-                            <CardImg src={item.data.thumbnail}  />
-                        </Col>
+                        {postImage}
                         <Col className="px-0 d-flex">
                             <span 
                                 className={`my-auto ${styles.title} text-left mr-3`}

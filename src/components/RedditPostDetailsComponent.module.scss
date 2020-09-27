@@ -1,0 +1,21 @@
+a {
+    
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+
+.post {
+    border-radius: 0 !important;
+    border: none;
+}
+.imgContainer {
+    max-height: 85vh;
+    display: flex;
+    width: 100%;
+    img {
+        max-width: 100%;
+        object-fit: contain;
+    }
+}

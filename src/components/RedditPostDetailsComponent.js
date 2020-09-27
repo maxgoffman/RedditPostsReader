@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, CardImg } from 'reactstrap';
+import styles from './RedditPostDetailsComponent.module.scss';
 
 /** 
   * @desc Reddit Post Details Component:
@@ -8,28 +9,46 @@ import { Row, Col, Card, CardImg } from 'reactstrap';
   * @required bootstrap 4
 */
 function RedditPostDetailsComponent(props) {
+    
     //render post list
     if (!props.itemSelected) {
         return (<React.Fragment></React.Fragment>);
     }
-
+    //check if image url
+    const postImage = (props.itemSelected.data.url.match(/\.(jpeg|jpg|gif|png)$/) != null ?
+        //url is an image, show it
+        <div 
+            className={`${styles.imgContainer} justify-content-center`}
+        >
+            <img src={props.itemSelected.data.url} alt="" />
+        </div>
+        :
+        (
+            //it's not an image, show the thumbnail
+            props.itemSelected.data.thumbnail_width ?
+            <Col className="mx-auto">
+                <CardImg src={props.itemSelected.data.thumbnail} className="w-auto h-auto" />
+            </Col>
+            :
+            //there is no thumbnail either
+            //don't show anything
+            <React.Fragment></React.Fragment>
+        )
+    );
+    
     return (
-        <Col xs={"auto"}>
+        <Col>
              <Card
-                tag="a" 
-                style={{ cursor: "pointer" }} 
-                className={`my-2 text-center`}>
+                className={`my-2 text-left ${styles.post}`}>
                 <Row>
                     <Col>
                         <h4>{props.itemSelected.data.author}</h4>
                     </Col>
                 </Row>
                 <Row className="mb-3">
-                    <Col>
-                        <CardImg top src={props.itemSelected.data.thumbnail}  />
-                    </Col>
+                    {postImage}
                 </Row>
-                <Row className="mb-3">
+                <Row className="mb-3 text-left">
                     <Col>
                         <span>{props.itemSelected.data.title}</span>
                     </Col>
