@@ -20,7 +20,6 @@ export const getTopPosts = (limit = 50) => async (dispatch) => {
     }
     const reddit = await response.json();
     if (reddit.data && reddit.data.children) {
-      console.log(reddit.data.children);
       dispatch(fetchSuccess(reddit.data.children));
     }
     else {

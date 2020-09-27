@@ -1,0 +1,57 @@
+@import "../styles/_variables";
+@import "../styles/_mixins";
+
+.postlist {
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    @include font-props($ibmplexsans-font, $size-small); 
+
+    a:hover {
+        text-decoration: none !important;
+    }
+    
+    .listheader {
+        border-bottom: 1px solid gray;
+        flex-shrink: 0 !important;
+    }
+    .listcontent {
+        flex-grow: 1 !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: 89vh;
+        flex-direction: column;
+    }
+    .listfooter {
+        border-top: 1px solid gray;
+        flex-shrink: 0 !important;
+        color: #ffb469;
+        cursor: pointer;
+    }
+}
+.post {
+    background-color: black;
+    border-radius: 0 !important;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    .thumbnail {
+        max-width: 100px !important;
+        max-height: 100px;
+    }
+    .author {
+        @include colored-font-props(white, $ibmplexsansbold-font, $size-large); 
+    } 
+    .time, .title {
+        @include colored-font-props(white, $ibmplexsans-font, $size-normal); 
+    }
+    .postfooter {
+        @include colored-font-props(#ffb469, $ibmplexsans-font, $size-normal);
+    }
+    .postdismiss {
+        color: white;
+    }
+}

@@ -16,7 +16,7 @@ const store = ConfigureStore();
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
+      <div className="App container-fluid px-0">
         <Main />
       </div>
     </Provider>

@@ -3,6 +3,9 @@ import { Row, Col, Card, CardImg } from 'reactstrap';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCircle} from '@fortawesome/free-solid-svg-icons';
+import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
+import styles from './RedditPostsListComponent.module.scss';
+
 
 /** 
   * @desc Reddit Posts List Component:
@@ -14,21 +17,19 @@ function RedditPostsListComponent(props) {
     //render post list
     return (
         <Col xs={3}>
-            <Row>
-                <Col>
-                    <h4>Reddit Posts</h4>
-                </Col>
-            </Row>
-            <ListItems 
-                posts={props.postList} 
-                toggleRedditPostDetails={props.toggleRedditPostDetails} 
-                removePost={props.removePost} 
-            />
-            <Row>
-                <Col>
+            <div className={styles.postlist}>
+                <div className={`${styles.listheader}`}>
+                    <h4 className="mb-0">Reddit Posts</h4>
+                </div>
+                <ListItems 
+                    posts={props.postList} 
+                    toggleRedditPostDetails={props.toggleRedditPostDetails} 
+                    removePost={props.removePost} 
+                />
+                <div className={`${styles.listfooter}`}>
                     <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </Col>
     );
 }
@@ -55,32 +56,44 @@ function ListItems(props) {
             const diffTime = moment.unix(item.data.created_utc).fromNow();
             const unreadIcon = item.read ?
                 <React.Fragment></React.Fragment> :
-                <FontAwesomeIcon icon={faCircle} />
+                <FontAwesomeIcon icon={faCircle} size="xs" />
             return (
                 <Card key={index} 
                     tag="a" 
                     onClick={() => props.toggleRedditPostDetails(item)} 
                     style={{ cursor: "pointer" }} 
-                    className={`my-2 text-center`}>
-                    <Row className="mb-3">
+                    className={`text-center ${styles.post}`}>
+                    <Row className="mb-1 pl-1 text-left">
                         <Col>
-                            {unreadIcon}<span>{item.data.author}</span>
+                            {unreadIcon}<span className={styles.author}> {item.data.author}</span>
                         </Col>
-                        <Col className="d-flex">
+                        <Col className={`d-flex ${styles.time}`}>
                             <span>{diffTime}</span>
                         </Col>
                     </Row>
-                    <Row className="mb-3">
-                        <Col>
-                            <CardImg top src={item.data.thumbnail}  />
+                    <Row className="mb-1 ml-1">
+                        <Col className={`pl-0 pr-1 text-left ${styles.thumbnail}`}>
+                            <CardImg src={item.data.thumbnail}  />
                         </Col>
-                        <Col className="d-flex">
-                            <span>{item.data.title}</span>
+                        <Col className="px-0 d-flex">
+                            <span 
+                                className={`my-auto ${styles.title} text-left mr-3`}
+                            >
+                                {item.data.title}
+                            </span>
                         </Col>
                     </Row>
-                    <Row className="mb-3">
-                        <Col>
-                            <span onClick={(event) => removePost(event, item)}>Dismiss Post</span>
+                    <Row className={`mb-1 ${styles.postfooter}`}>
+                        <Col className="text-left">
+                            <span 
+                                onClick={(event) => removePost(event, item)}
+                            >
+                                <FontAwesomeIcon 
+                                    icon={faTimesCircle} 
+                                    style={{fontSize:'1.25em'}} 
+                                />
+                                <span className={styles.postdismiss}> Dismiss Post</span>
+                            </span>
                         </Col>
                         <Col className="d-flex">
                             <span>{item.data.num_comments} comments</span>
@@ -89,7 +102,7 @@ function ListItems(props) {
                 </Card>
             );
         });
-    return (<React.Fragment>{items}</React.Fragment>);
+    return (<div className={`${styles.listcontent}`}>{items}</div>);
 }
 
 export default RedditPostsListComponent;
