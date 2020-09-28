@@ -10,7 +10,7 @@ import * as ActionTypes from './ActionTypes';
 export const getTopPosts = (after = null, limit = 50) => async (dispatch) => {
   dispatch(initFetch());
 
-  const redditUrl = `http://www.reddit.com/top.json?limit=${limit}${after ? `&after=${after}` : ''}`;
+  const redditUrl = `https://www.reddit.com/top.json?limit=${limit}${after ? `&after=${after}` : ''}`;
   try {
     const response = await fetch(redditUrl);
     if (!response.ok) {
@@ -31,17 +31,17 @@ export const getTopPosts = (after = null, limit = 50) => async (dispatch) => {
 };
 
 
-const initFetch = () => ({
+export const initFetch = () => ({
   type: ActionTypes.REDDIT_BEGIN_FETCH
 });
 
-const fetchSuccess = (list, after) => ({
+export const fetchSuccess = (list, after) => ({
   type: ActionTypes.REDDIT_FETCHED_DATA,
   list: list,
   after: after
 });
 
-const fetchFailed = (errmess) => ({
+export const fetchFailed = (errmess) => ({
   type: ActionTypes.REDDIT_ERROR_FETCH,
   error: errmess
 });

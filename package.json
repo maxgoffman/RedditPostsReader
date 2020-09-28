@@ -1,5 +1,6 @@
 {
   "name": "RedditPostsReader",
+  "homepage": "https://goffman.com.ar/redditpostsreader/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -14,6 +14,7 @@ function RedditPostDetailsComponent(props) {
     if (!props.itemSelected) {
         return (<React.Fragment></React.Fragment>);
     }
+    
     //check if image url
     const postImage = (props.itemSelected.data.url.match(/\.(jpeg|jpg|gif|png)$/) != null ?
         //url is an image, show it
@@ -23,6 +24,7 @@ function RedditPostDetailsComponent(props) {
             <img 
                 src={props.itemSelected.data.url} 
                 alt="" 
+                style={{cursor: "pointer"}}
                 onClick={() => {window.location = props.itemSelected.data.url;}}
             />
         </div>
