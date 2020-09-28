@@ -17,7 +17,8 @@ const initialState = {
   isLoading: true, 
   list: null,
   selectedItem: null,
-  selectedPostIds: (persistedPostIds ? persistedPostIds: [])
+  selectedPostIds: (persistedPostIds ? persistedPostIds: []),
+  after: null
 };
 
 /** 
@@ -29,25 +30,32 @@ const initialState = {
 export const Reddit = (state = initialState, action) => {
     switch (action.type) {
       case ActionTypes.REDDIT_BEGIN_FETCH:
-        return {...state, isLoading: true, errMess: null, list: null, selectedItem: null};
+        return {...state, isLoading: true, errMess: null, selectedItem: null};
       
       case ActionTypes.REDDIT_FETCHED_DATA:
         const remainingIds = [...state.selectedPostIds];
-        const updatedList = action.list.map((item) => {
+        let updatedList = action.list.map((item) => {
           if (remainingIds.length <= 0) {
             return item;
           }
           const indexId = remainingIds.findIndex((id) => id === item.data.id);
           if (indexId !== -1) {
-            console.log(remainingIds);
             remainingIds.splice(indexId, 1);
-            console.log(remainingIds);
             return {...item, read:true};
           }
           return item;
         });
-        console.log(state.selectedPostIds);
-        return {...state, isLoading: false, errMess: null, list: updatedList, selectedItem: null};
+        if (state.list && state.list.length > 0) {
+          updatedList = [...state.list, ...updatedList];
+        }
+        return {
+          ...state, 
+          isLoading: false, 
+          errMess: null, 
+          list: updatedList, 
+          selectedItem: null,
+          after: action.after
+        };
 
       case ActionTypes.REDDIT_ERROR_FETCH:
           return {...state, isLoading: false, errMess: action.error, list: null, selectedItem: null};

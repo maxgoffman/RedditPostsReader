@@ -7,12 +7,12 @@ import * as ActionTypes from './ActionTypes';
   * @author Maximiliano Goffman
   * @required redux redux-thunk
 */
-export const getTopPosts = (limit = 50) => async (dispatch) => {
+export const getTopPosts = (after = null, limit = 50) => async (dispatch) => {
   dispatch(initFetch());
 
-  
+  const redditUrl = `http://www.reddit.com/top.json?limit=${limit}${after ? `&after=${after}` : ''}`;
   try {
-    const response = await fetch(`http://www.reddit.com/top.json?limit=${limit}`);
+    const response = await fetch(redditUrl);
     if (!response.ok) {
       let error = new Error('Error ' + response.status + ': ' + response.statusText);
       error.response = response;
@@ -20,10 +20,10 @@ export const getTopPosts = (limit = 50) => async (dispatch) => {
     }
     const reddit = await response.json();
     if (reddit.data && reddit.data.children) {
-      dispatch(fetchSuccess(reddit.data.children));
+      dispatch(fetchSuccess(reddit.data.children, reddit.data.after));
     }
     else {
-      dispatch(fetchSuccess([]));
+      dispatch(fetchSuccess([], null));
     }
   } catch(error) {
     dispatch(fetchFailed(error.message));
@@ -35,9 +35,10 @@ const initFetch = () => ({
   type: ActionTypes.REDDIT_BEGIN_FETCH
 });
 
-const fetchSuccess = (list) => ({
+const fetchSuccess = (list, after) => ({
   type: ActionTypes.REDDIT_FETCHED_DATA,
-  list: list
+  list: list,
+  after: after
 });
 
 const fetchFailed = (errmess) => ({

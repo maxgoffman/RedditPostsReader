@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCircle} from '@fortawesome/free-solid-svg-icons';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 import styles from './RedditPostsListComponent.module.scss';
+import { Loading } from './controls/loadplaceholder/LoadingComponent';
 
 
 /** 
@@ -15,6 +16,12 @@ import styles from './RedditPostsListComponent.module.scss';
   * @required bootstrap 4
 */
 function RedditPostsListComponent(props) {
+    const loadingPlaceholder = (props.loading ?     
+        <Row>    
+            <Loading />
+        </Row> :
+        <React.Fragment></React.Fragment>
+    );
     //render post list
     return (
         <Col xs={3} className={`${styles.columnBack} pr-0`}>
@@ -28,14 +35,25 @@ function RedditPostsListComponent(props) {
                     removePost={props.removePost} 
                     startRemovePost={props.startRemovePost} 
                 />
-                <Row className={`${styles.listfooter} mx-auto`}>
-                    <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
+                {loadingPlaceholder}
+                <Row className={`${styles.listfooter}`}>
+                    <Col>
+                        <h4 onClick={() => props.morePosts()}>More Posts</h4>
+                    </Col>
+                    <Col>
+                        <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
+                    </Col>
                 </Row>
             </div>
         </Col>
     );
 }
 
+/**
+ * List of posts
+ * I could separate this component in a different file
+ * @param {*} props 
+ */
 function ListItems(props) {
     //configure moment for correct relative date conversion
     moment.relativeTimeRounding(Math.floor);

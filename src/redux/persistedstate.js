@@ -19,7 +19,6 @@ export const loadPosts = () => {
 //Save Posts to cookie
 export const savePosts = (postIds) => {
   try {
-    console.log(postIds);
     const serializedState = JSON.stringify(postIds);
     Cookie.set("posts", serializedState, { sameSite:'strict' });
   } catch (err) {

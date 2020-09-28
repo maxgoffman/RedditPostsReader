@@ -21,6 +21,7 @@ import RedditPostDetailsComponent from './RedditPostDetailsComponent';
 */
 const Main = React.memo( (props) => {
   const reduxProps = useSelector(state => ({
+    nextPage:state.Reddit.after,
     list:state.Reddit.list,
     itemSelected:state.Reddit.selectedItem,
     loading:state.Reddit.isLoading,
@@ -49,9 +50,12 @@ const Main = React.memo( (props) => {
   const removeAllPosts = () => {
     dispatch(removeAllItems());
   };
+  const nextPosts = () => {
+    dispatch(getTopPosts(reduxProps.nextPage));
+  };
 
   const mainScreen = () => {
-    if (reduxProps.loading) {
+    if (reduxProps.loading && !reduxProps.list) {
       return(
           <Row>    
               <Loading />
@@ -66,7 +70,9 @@ const Main = React.memo( (props) => {
             toggleRedditPostDetails={toggleRedditPostDetails}
             startRemovePost={startRemovePost}
             removePost={removePost} 
-            removeAllPosts={removeAllPosts} 
+            removeAllPosts={removeAllPosts}
+            morePosts={nextPosts}
+            loading={reduxProps.loading} 
           />
           <RedditPostDetailsComponent itemSelected={reduxProps.itemSelected} />
         </Row>
