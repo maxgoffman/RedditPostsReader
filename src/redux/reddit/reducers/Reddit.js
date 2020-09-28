@@ -1,11 +1,23 @@
 import * as ActionTypes from '../ActionTypes';
+import { loadPosts, savePosts } from "../../persistedstate";
 
+
+
+//IMPORTANT NOTE:
+//I'm only persisting read posts and not dismissed posts.
+//There is a very simple reason:
+//If we persist dismissed posts and (for example) we dismiss them all
+//then after a refresh those posts will still be missing
+//which would make the whole test pointless
+//At least persisting read/unread post we can check persistance works
+const persistedPostIds = loadPosts();
 
 const initialState = { 
   errMess: null, 
   isLoading: true, 
   list: null,
-  selectedItem: null
+  selectedItem: null,
+  selectedPostIds: (persistedPostIds ? persistedPostIds: [])
 };
 
 /** 
@@ -20,7 +32,22 @@ export const Reddit = (state = initialState, action) => {
         return {...state, isLoading: true, errMess: null, list: null, selectedItem: null};
       
       case ActionTypes.REDDIT_FETCHED_DATA:
-        return {...state, isLoading: false, errMess: null, list: action.list, selectedItem: null};
+        const remainingIds = [...state.selectedPostIds];
+        const updatedList = action.list.map((item) => {
+          if (remainingIds.length <= 0) {
+            return item;
+          }
+          const indexId = remainingIds.findIndex((id) => id === item.data.id);
+          if (indexId !== -1) {
+            console.log(remainingIds);
+            remainingIds.splice(indexId, 1);
+            console.log(remainingIds);
+            return {...item, read:true};
+          }
+          return item;
+        });
+        console.log(state.selectedPostIds);
+        return {...state, isLoading: false, errMess: null, list: updatedList, selectedItem: null};
 
       case ActionTypes.REDDIT_ERROR_FETCH:
           return {...state, isLoading: false, errMess: action.error, list: null, selectedItem: null};
@@ -31,6 +58,9 @@ export const Reddit = (state = initialState, action) => {
           return {...state, selectedItem: action.item};
         }  
         const selectedItem = {...action.item, read:true}; 
+        
+        const updateSelectedPostsIds = [...state.selectedPostIds, action.item.data.id];
+        savePosts(updateSelectedPostsIds);
         return {
           ...state, 
           list: state.list.map((item) => {
@@ -39,7 +69,8 @@ export const Reddit = (state = initialState, action) => {
               }
               return item;
             }),
-          selectedItem: selectedItem
+          selectedItem: selectedItem,
+          selectedPostIds: updateSelectedPostsIds
         };
       
       case ActionTypes.REDDIT_REMOVING_ITEM:
