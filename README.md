@@ -7,7 +7,7 @@ Did this work in two days. That includes research of how to use Reddit's API, be
 ![alt text](https://raw.githubusercontent.com/maxgoffman/RedditPostsReader/master/screens/rustic.png)<br />
 I'm pretty sure that with enough time I could improve it a lot. It is "responsive" in the sense that it adjust the content to the viewport. However, being completely honest, I know that it doesn't look precisely amazing with smaller resolutions.
 ## [Updated] Summary
-Implemented restoration of read/unread posts first, and also just introduced preservation of post details.
+Implemented restoration of read/unread posts first, and also just introduced preservation of post details. Used cookies to develop restoration features.
 ## Tools
 I used create-react-app because I think it's a decent solution for prototyping fast a front tend app. Normally, I don't use it in a professional project. I tend to work with Docker, Docker Compose and Parcel for bundling (because I love it's automagical self configuration). Using create-react-app means I also used Jest for the automated test. I also used a lot of packages to solve my problems fast like reactstrap, font awesome, react-transition-group and so on. I'm saying this because I want to tell you that this isn't what I usually. I tend to be a lot more careful. 
 ## [Updated] Tools
