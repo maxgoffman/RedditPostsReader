@@ -1,5 +1,5 @@
 import * as ActionTypes from '../ActionTypes';
-import { loadPosts, savePosts } from "../../persistedstate";
+import { loadPosts, savePosts, loadPostDetails, savePostDetails } from "../../persistedstate";
 
 
 
@@ -12,11 +12,13 @@ import { loadPosts, savePosts } from "../../persistedstate";
 //At least persisting read/unread post we can check persistance works
 const persistedPostIds = loadPosts();
 
+const persistedPostDetails = loadPostDetails();
+
 const initialState = { 
   errMess: null, 
   isLoading: true, 
   list: null,
-  selectedItem: null,
+  selectedItem: (persistedPostDetails ? persistedPostDetails: null),
   selectedPostIds: (persistedPostIds ? persistedPostIds: []),
   after: null
 };
@@ -30,7 +32,7 @@ const initialState = {
 export const Reddit = (state = initialState, action) => {
     switch (action.type) {
       case ActionTypes.REDDIT_BEGIN_FETCH:
-        return {...state, isLoading: true, errMess: null, selectedItem: null};
+        return {...state, isLoading: true, errMess: null};
       
       case ActionTypes.REDDIT_FETCHED_DATA:
         const remainingIds = [...state.selectedPostIds];
@@ -53,19 +55,20 @@ export const Reddit = (state = initialState, action) => {
           isLoading: false, 
           errMess: null, 
           list: updatedList, 
-          selectedItem: null,
           after: action.after
         };
 
       case ActionTypes.REDDIT_ERROR_FETCH:
-          return {...state, isLoading: false, errMess: action.error, list: null, selectedItem: null};
+          return {...state, isLoading: false, errMess: action.error, list: null};
       
       case ActionTypes.REDDIT_SELECT_ITEM:
         
         if (action.item.read) {
+          savePostDetails(action.item);
           return {...state, selectedItem: action.item};
         }  
         const selectedItem = {...action.item, read:true}; 
+        savePostDetails(selectedItem);
         
         const updateSelectedPostsIds = [...state.selectedPostIds, action.item.data.id];
         savePosts(updateSelectedPostsIds);
