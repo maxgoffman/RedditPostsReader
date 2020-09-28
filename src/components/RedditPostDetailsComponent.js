@@ -20,12 +20,16 @@ function RedditPostDetailsComponent(props) {
         <div 
             className={`${styles.imgContainer} justify-content-center`}
         >
-            <img src={props.itemSelected.data.url} alt="" />
+            <img 
+                src={props.itemSelected.data.url} 
+                alt="" 
+                onClick={() => {window.location = props.itemSelected.data.url;}}
+            />
         </div>
         :
         (
             //it's not an image, show the thumbnail
-            props.itemSelected.data.thumbnail_width ?
+            props.itemSelected.data.thumbnail.match(/\.(jpeg|jpg|gif|png)$/) != null ?
             <Col className="mx-auto">
                 <CardImg src={props.itemSelected.data.thumbnail} className="w-auto h-auto" />
             </Col>
