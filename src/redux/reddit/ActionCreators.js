@@ -50,6 +50,11 @@ export const selectItem = (item) => ({
   item: item
 });
 
+export const removingItem = (item) => ({
+  type: ActionTypes.REDDIT_REMOVING_ITEM,
+  item: item
+});
+
 export const removeItem = (item) => ({
   type: ActionTypes.REDDIT_REMOVE_ITEM,
   item: item

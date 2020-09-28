@@ -26,6 +26,7 @@ function RedditPostsListComponent(props) {
                     posts={props.postList} 
                     toggleRedditPostDetails={props.toggleRedditPostDetails} 
                     removePost={props.removePost} 
+                    startRemovePost={props.startRemovePost} 
                 />
                 <Row className={`${styles.listfooter} mx-auto`}>
                     <h4 onClick={() => props.removeAllPosts()}>Dismiss All</h4>
@@ -45,12 +46,16 @@ function ListItems(props) {
     moment.relativeTimeThreshold('w', 4);
     moment.relativeTimeThreshold('M', 12);
     
+    const transitionEnd = (item) => {
+        props.removePost(item);
+    };
+
     const removePost = (e, item) => {
         //stop event propagation to avoid card click
         e.stopPropagation();
-        props.removePost(item);
-    }
-    
+        props.startRemovePost(item);
+    };
+
     const items = !props.posts ? 
         [] : 
         props.posts.map((item, index, list) => {
@@ -95,13 +100,21 @@ function ListItems(props) {
                 //there is no thumbnail, don't show anything
                 <React.Fragment></React.Fragment>
             );
+            let cardClasses = `text-center ${styles.post}`;
+            let endTransitionCallback;
+            if (item.removing) {
+                cardClasses += " dismiss-exit dismiss-exit-active";
+                endTransitionCallback = () => transitionEnd(item);
+            }
             return (
                 <CSSTransition key={index} classNames="dismiss" timeout={300}>
                     <Card 
                         tag="a" 
                         onClick={() => props.toggleRedditPostDetails(item)} 
                         style={{ cursor: "pointer" }} 
-                        className={`text-center ${styles.post}`}>
+                        className={cardClasses}
+                        onTransitionEnd={endTransitionCallback}
+                    >
                         <Row className="mb-1 pl-1 text-left">
                             <Col>
                                 {unreadIcon}<span className={styles.author}> {item.data.author}</span>

@@ -42,6 +42,18 @@ export const Reddit = (state = initialState, action) => {
           selectedItem: selectedItem
         };
       
+      case ActionTypes.REDDIT_REMOVING_ITEM:
+        
+      return {
+          ...state, 
+          list: state.list.map((item) => {
+            if (item === action.item) {
+              return {...item, removing: true};
+            }
+            return item;
+          })
+        };
+      
       case ActionTypes.REDDIT_REMOVE_ITEM:
           return {
             ...state, 
